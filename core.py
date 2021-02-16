@@ -21,6 +21,11 @@ class Application:
             data_str = data.decode(encoding='utf-8')
             result = self.input_data_parse(data_str)
         return result
+    
+    def new_route(self, url):
+        def inner(view):
+            self.routes[url] = view
+        return inner
 
     def __init__(self, routes: dict, front: list):
         """
@@ -58,3 +63,26 @@ class Application:
         else:
             start_response('404 NOT FOUND', [('Content-Type', 'text/html')])
             return [b"Not Found"]
+
+
+class DebugApplication(Application):
+
+    def __init__(self, routes, front):
+        self.application = Application(routes, front)
+        super().__init__(routes, front)
+
+    def __call__(self, environ, start_response):
+        print('DEBUG MODE')
+        print(environ)
+        return self.application(environ, start_response)
+    
+    
+class MockApplication(Application):
+
+    def __init__(self, routes, front):
+        self.application = Application(routes, front)
+        super().__init__(routes, front)
+
+    def __call__(self, environ, start_response):
+        start_response('200 OK', [('Content-Type', 'text/html')])
+        return [b'Hello from Mock']
