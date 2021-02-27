@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}
+    Contact
+{% endblock %}
+{% block body %}
+{% include "inc-menu.html" %}
+<h2>Отправить сообщение</h2>
+    <form method="post">
+        <input type="text" name="title" placeholder="Тема">
+        <input type="text" name="text" placeholder="Текст сообщения">
+        <input type="email" name="email" placeholder="email">
+		<button type="submit">Отправить</button>
+    </form>
+{% endblock %}
+
